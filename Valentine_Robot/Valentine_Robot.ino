@@ -8,15 +8,18 @@
 
 #define WHISTLE_PIN             9       
 #define EYEBROWS_PIN            10
-#define EYES_PIN                7
+#define EYE1_PIN                7
+#define EYE2_PIN                6
+#define GO_BUTTON_PIN1          5
+#define GO_BUTTON_PIN2          4
 
 #define WHISTLE_TOP_FREQ_A      2000         
 #define WHISTLE_BOTTOM_FREQ_A   1200     
 #define WHISTLE_TOP_FREQ_B      1800       
 #define WHISTLE_BOTTOM_FREQ_B   1100
 
-#define EYEBROWS_UP             65     // Servo degrees; 90deg is center      
-#define EYEBROWS_DOWN           95    // Servo degrees; 90deg is center
+#define EYEBROWS_UP             80     // Servo degrees; 90deg is center      
+#define EYEBROWS_DOWN           110    // Servo degrees; 90deg is center
 
 Servo myservo;  // create servo object to control a servo 
                 // a maximum of eight servo objects can be created 
@@ -25,28 +28,32 @@ void setup()
 {
   initEyebrows();
   initEyes();
-  
-  raiseEyebrows();
-  lowerEyebrows();
-  raiseEyebrows();
-  lowerEyebrows();
-  
-  whistle();
-  
-  turnOnEyes();
-  turnOffEyes();
-  turnOnEyes();
-  turnOffEyes();  
-  turnOnEyes();
-  turnOffEyes();
-  turnOnEyes();
-  turnOffEyes();
+  initGoButton();
 }
+
 
 void loop() 
 {
-  // Empty; there is no loop function
+  if(digitalRead(GO_BUTTON_PIN1) == 0)
+  {
+    raiseEyebrows();
+    lowerEyebrows();
+    raiseEyebrows();
+    lowerEyebrows();
+    
+    whistle();
+    
+    turnOnEyes();
+    turnOffEyes();
+    turnOnEyes();
+    turnOffEyes();  
+    turnOnEyes();
+    turnOffEyes();
+    turnOnEyes();
+    turnOffEyes();
+  }
 }
+
 
 void whistle(void)
 {
@@ -85,6 +92,7 @@ void whistle(void)
 void initEyebrows(void)
 {
   myservo.attach(EYEBROWS_PIN);      // attaches the servo on pin 9 to the servo object 
+  myservo.write(EYEBROWS_DOWN);      // Put eyebrows in "down" position 
 }
 
 
@@ -104,21 +112,34 @@ void lowerEyebrows(void)
 
 void initEyes(void)
 {
-  pinMode(EYES_PIN, OUTPUT);
+  pinMode(EYE1_PIN, OUTPUT);
+  pinMode(EYE2_PIN, OUTPUT);
   turnOffEyes();                     // Turn eyes off 
 }
 
 
 void turnOnEyes(void)
 {
-  digitalWrite(EYES_PIN, LOW);       // Turn eyes on 
+  digitalWrite(EYE1_PIN, LOW);       // Turn eyes on 
+  digitalWrite(EYE2_PIN, LOW);       // Turn eyes on 
   delay(125);                        // Waits 125ms  
 }
 
 
 void turnOffEyes(void)
 {
-  digitalWrite(EYES_PIN, HIGH);      // Turn eyes off 
+  digitalWrite(EYE1_PIN, HIGH);      // Turn eyes off 
+  digitalWrite(EYE2_PIN, HIGH);      // Turn eyes off 
   delay(125);                        // Waits 125ms  
 }
+
+
+void initGoButton(void)
+{
+  pinMode(GO_BUTTON_PIN1, INPUT_PULLUP);
+  pinMode(GO_BUTTON_PIN2, OUTPUT);
+  digitalWrite(GO_BUTTON_PIN2, LOW);
+}
+
+
 
